@@ -110,12 +110,24 @@ AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_INSTALL
 LT_PROG_RC
+PKG_PROG_PKG_CONFIG
 
 AC_LANG(C++)
 
 AC_CHECK_LIB(c, clock_gettime,[],[
 	AC_CHECK_LIB(rt, clock_gettime)
 ])
+
+AC_ARG_ENABLE(lua,AC_HELP_STRING([--enable-lua],[build with lua script support]),[],[enable_lua=no])
+
+AS_IF([test "x${enable_lua}" != "xno"],
+	[
+		PKG_CHECK_MODULES(LUAJIT,luajit >= 2.0)
+		AC_DEFINE(ENABLE_LUA, 1)
+	]
+)
+
+AM_CONDITIONAL(ENABLE_LUA, [test "x${enable_lua}" != "xno"])
 
 # Checks for libraries.
 

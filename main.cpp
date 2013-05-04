@@ -400,13 +400,12 @@ int main( int argc, char *argv[] )
 	}
 
 	// 设置到中国的时区，否则 qq 消息时间不对啊.
+#ifndef _WIN32
+	setenv("TZ", "Asia/Shanghai", 1);
+# else
 	putenv( ( char* )"TZ=Asia/Shanghai" );
+# endif
 
-	// 设置日志自动记录目录.
-	if( ! logdir.empty() ) {
-		logfile.log_path( logdir );
-		chdir( logdir.c_str() );
-	}
 
 #ifdef WIN32
 	::InitCommonControls();
@@ -527,12 +526,26 @@ int main( int argc, char *argv[] )
 	}
 
 #endif
+	{
+#ifndef _WIN32
+		std::string env_oldpwd = fs::complete(fs::current_path()).string();
+		setenv("O_PWD", env_oldpwd.c_str(), 1);
+# else
+		std::string env_oldpwd = std::string("O_PWD=") + fs::complete(fs::current_path()).string();
+		putenv( (char*)env_oldpwd.c_str() );
+#endif
+
+	}
+	// 设置日志自动记录目录.
+	if( ! logdir.empty() ) {
+		logfile.log_path( logdir );
+		chdir( logdir.c_str() );
+	}
 
 	if( qqnumber.empty() || qqpwd.empty() ) {
 		std::cerr << console_out_str("请设置qq号码和密码") << std::endl;
 		exit( 1 );
 	}
-
 
 	mybot.preamble_irc_fmt = preamble_irc_fmt;
 	mybot.preamble_qq_fmt = preamble_qq_fmt;

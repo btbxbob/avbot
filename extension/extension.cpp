@@ -6,6 +6,10 @@
 
 #include "libavlog/avlog.hpp"
 
+#ifdef ENABLE_LUA
+#	include "luascript.hpp"
+#endif
+
 #include "urlpreview.hpp"
 #include "joke.hpp"
 
@@ -36,4 +40,12 @@ void new_channel_set_extension(boost::asio::io_service &io_service, avbot & mybo
 					channel_name
 		)
 	);
+#ifdef ENABLE_LUA
+	mybot.on_message.connect(
+		::callluascript(io_service,
+					io_service.wrap(boost::bind(sender, boost::ref(mybot), channel_name, _1, 1)),
+					channel_name
+		)
+	);
+#endif
 }

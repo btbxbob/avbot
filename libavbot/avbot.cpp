@@ -366,6 +366,7 @@ void avbot::callback_on_qq_group_newbee( qqGroup_ptr group, qqBuddy* buddy)
 	ptree_who.add("name", buddy->nick);
 	ptree_who.add("qqnumber", buddy->qqnum);
 	ptree_who.add("card", buddy->card);
+	ptree_who.add("nick", buddy->card.empty()? buddy->nick:buddy->card);
 	if( ( buddy->mflag & 21 ) == 21 || buddy->uin == group->owner )
 		message.add("op", "1");
 	else

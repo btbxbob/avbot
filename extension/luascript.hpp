@@ -10,19 +10,25 @@
 #include <boost/asio.hpp>
 #include <boost/property_tree/ptree.hpp>
 
+extern "C"{
+#include <luajit-2.0/luajit.h>
+#include <luajit-2.0/lualib.h>
+#include <luajit-2.0/lauxlib.h>
+}
+
 class callluascript
 {
 	boost::asio::io_service &io_service;
 	boost::function<void ( std::string ) > m_sender;
 	std::string m_channel_name;
+	mutable boost::shared_ptr<lua_State> m_lua_State;
+
+	void load_lua() const;
+	void call_lua(std::string jsondata) const ;
 
 public:
-	template<class MsgSender>
-	callluascript( boost::asio::io_service &_io_service,  MsgSender sender, std::string channel_name )
-		: io_service( _io_service ), m_sender( sender ), m_channel_name( channel_name )
-	{
-	}
-
+	callluascript( boost::asio::io_service &_io_service,  boost::function<void ( std::string ) >  sender, std::string channel_name );
+	~callluascript();
 	// on_message 回调.
 	void operator()( boost::property_tree::ptree message ) const;
 };
