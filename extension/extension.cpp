@@ -11,7 +11,10 @@
 #endif
 
 #include "urlpreview.hpp"
+
+#ifdef ENABLE_JOKE
 #include "joke.hpp"
+#endif
 
 // dummy file
 
@@ -27,12 +30,14 @@ static void sender(avbot & mybot,std::string channel_name, std::string txt, bool
 
 void new_channel_set_extension(boost::asio::io_service &io_service, avbot & mybot , std::string channel_name)
 {
+#ifdef ENABLE_JOKE
 	mybot.on_message.connect(
 		joke(io_service,
 			io_service.wrap(boost::bind(sender, boost::ref(mybot), channel_name, _1, 0)),
 			channel_name, boost::posix_time::seconds(600)
 		)
 	);
+#endif
 
 	mybot.on_message.connect(
 		::urlpreview(io_service,

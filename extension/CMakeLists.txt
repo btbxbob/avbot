@@ -1,5 +1,10 @@
 
 option(ENABLE_LUA "enable lua script support" OFF)
+option(ENABLE_JOKE "enable Joking" OFF)
+
+if(ENABLE_JOKE)
+add_definations(-DENABLE_JOKE)
+endif()
 
 add_library(extension STATIC extension.cpp joke.cpp urlpreview.cpp bulletin.cpp )
 
