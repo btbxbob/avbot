@@ -148,6 +148,9 @@ static void on_verify_code( const boost::asio::const_buffer & imgbuf, avbot & my
 	img.write( data, imgsize );
 	qqneedvc = true;
 	// send to xmpp and irc
+	//added jp2a hack by bx
+	std::string system_command="jp2a --width=80 "+imgpath.string();
+	system(system_command.c_str());
  	mybot.broadcast_message( "请查看qqlog目录下的vercode.jpeg 然后用\".qqbot vc XXX\"输入验证码:" );
 	std::cerr << console_out_str("请查看qqlog目录下的vercode.jpeg 然后输入验证码: ") <<  std::flush ;
 	do_vc_code = boost::bind(&avbot::feed_login_verify_code, &mybot, _1);
@@ -654,6 +657,5 @@ int main( int argc, char *argv[] )
 		}
 	}
 
-	avloop_run( io_service);
 	return 0;
 }
