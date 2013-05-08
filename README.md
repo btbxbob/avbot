@@ -13,6 +13,7 @@ avbot 连通 IRC、XMPP 和  QQ群，并能实时记录聊天信息。每日自�
 ### QQ图片转成 url 链接给 IRC和XMPP聊天室
 ### 登录 EMAIL (使用 pop3 协议), 获取邮件, 并转发到聊天室
 ### 将聊天内容转化为邮件发送到指定的邮箱(在聊天室使用 .qqbot mail to 命令)
+### 支持lua作为脚本
 
 # rpm 包
 
@@ -38,10 +39,12 @@ avbot 连通 IRC、XMPP 和  QQ群，并能实时记录聊天信息。每日自�
 	cd build
 	cmake [avbot源码的路径]
 	make -j8
+## lua支持开关
+cmake时加上-DENABLE_LUA=on，可以编译带lua支持的版本。
 
 # 编译依赖
 
-依赖 boost。 boost 要 1.48 以上。
+依赖 boost。 boost 要 1.50 以上。
 
 gloox 已经通过 bundle 的形式包含了，不需要外部依赖了。
 如果使用的时候出现了段错误，请试试看使用系统的 gloox ,　编译的时候通过　cmake -DINTERNALGLOOX=OFF 关闭内置gloox的使用。
